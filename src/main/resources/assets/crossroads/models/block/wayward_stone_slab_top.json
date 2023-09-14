@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "crossroads:block/wayward_stone",
+    "side": "crossroads:block/wayward_stone",
+    "top": "crossroads:block/wayward_stone"
+  }
+}

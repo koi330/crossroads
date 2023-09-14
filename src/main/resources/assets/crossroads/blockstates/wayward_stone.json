@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "crossroads:block/wayward_stone"
+      },
+      {
+        "model": "crossroads:block/wayward_stone_mirrored"
+      },
+      {
+        "model": "crossroads:block/wayward_stone",
+        "y": 180
+      },
+      {
+        "model": "crossroads:block/wayward_stone_mirrored",
+        "y": 180
+      }
+    ]
+  }
+}
