@@ -11,7 +11,7 @@
               "add": false,
               "conditions": [
                 {
-                  "block": "crossroads:wayward_stone_brick_slab",
+                  "block": "crossroads:wayward_stone_slab",
                   "condition": "minecraft:block_state_property",
                   "properties": {
                     "type": "double"
@@ -25,11 +25,11 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "crossroads:wayward_stone_brick_slab"
+          "name": "crossroads:wayward_stone_slab"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "crossroads:blocks/wayward_stone_brick_slab"
+  "random_sequence": "crossroads:blocks/wayward_stone_slab"
 }
