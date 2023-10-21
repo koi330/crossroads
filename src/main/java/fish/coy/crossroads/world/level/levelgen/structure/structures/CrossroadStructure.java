@@ -1,6 +1,8 @@
-package fish.coy.crossroads;
+package fish.coy.crossroads.world.level.levelgen.structure.structures;
 
 import com.mojang.serialization.Codec;
+import fish.coy.crossroads.Crossroads;
+import fish.coy.crossroads.world.registration.StructureTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -34,6 +36,6 @@ public class CrossroadStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return Registration.CROSSROAD_TYPE.get();
+        return StructureTypes.CROSSROAD_TYPE.get();
     }
 }

@@ -1,6 +1,9 @@
 package fish.coy.crossroads;
 
 import com.mojang.logging.LogUtils;
+import fish.coy.crossroads.world.registration.Blocks;
+import fish.coy.crossroads.world.registration.CreativeModeTabs;
+import fish.coy.crossroads.world.registration.CrossroadsRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -44,10 +47,10 @@ public class Crossroads {
 
     public Crossroads() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        Registration.init(modEventBus);
+        CrossroadsRegistries.init(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(Registration::addCreative);
+        modEventBus.addListener(CreativeModeTabs::addCreative);
         modEventBus.addListener(Crossroads::gatherData);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
@@ -82,35 +85,35 @@ public class Crossroads {
 
         @Override
         protected void registerStatesAndModels() {
-            ResourceLocation stone = Registration.WAYWARD_STONE.getId().withPrefix("block/");
-            ResourceLocation brick = Registration.WAYWARD_STONE_BRICKS.getId().withPrefix("block/");
+            ResourceLocation stone = Blocks.WAYWARD_STONE.getId().withPrefix("block/");
+            ResourceLocation brick = Blocks.WAYWARD_STONE_BRICKS.getId().withPrefix("block/");
 
-            simpleBlockWithItem(Registration.WAYWARD_STONE_BRICKS.get());
+            simpleBlockWithItem(Blocks.WAYWARD_STONE_BRICKS.get());
 
-            ModelFile stonemodel = cubeAll(Registration.WAYWARD_STONE.get());
+            ModelFile stonemodel = cubeAll(Blocks.WAYWARD_STONE.get());
             ModelFile stonemirrormodel = models().singleTexture("wayward_stone_mirrored", mcLoc(ModelProvider.BLOCK_FOLDER + "/cube_mirrored_all"), "all", stone);
 
-            getVariantBuilder(Registration.WAYWARD_STONE.get()).partialState().setModels(
+            getVariantBuilder(Blocks.WAYWARD_STONE.get()).partialState().setModels(
                     new ConfiguredModel(stonemodel),
                     new ConfiguredModel(stonemirrormodel),
                     new ConfiguredModel(stonemodel, 0, 180, false),
                     new ConfiguredModel(stonemirrormodel, 0, 180, false));
 
-            simpleBlockItem(Registration.WAYWARD_STONE.get(), stonemodel);
+            simpleBlockItem(Blocks.WAYWARD_STONE.get(), stonemodel);
 
-            stairsBlock(Registration.WAYWARD_STONE_BRICK_STAIRS.get(), brick);
-            slabBlock(Registration.WAYWARD_STONE_BRICK_SLAB.get(), brick, brick);
-            wallBlock(Registration.WAYWARD_STONE_BRICK_WALL.get(), brick);
+            stairsBlock(Blocks.WAYWARD_STONE_BRICK_STAIRS.get(), brick);
+            slabBlock(Blocks.WAYWARD_STONE_BRICK_SLAB.get(), brick, brick);
+            wallBlock(Blocks.WAYWARD_STONE_BRICK_WALL.get(), brick);
 
-            slabBlock(Registration.WAYWARD_STONE_SLAB.get(), stone, stone);
+            slabBlock(Blocks.WAYWARD_STONE_SLAB.get(), stone, stone);
 
-            ModelFile wall = models().wallInventory(Registration.WAYWARD_STONE_BRICK_WALL.getId().getPath() + "_inventory", brick);
+            ModelFile wall = models().wallInventory(Blocks.WAYWARD_STONE_BRICK_WALL.getId().getPath() + "_inventory", brick);
 
-            itemModels().withExistingParent(Registration.WAYWARD_STONE_BRICK_STAIRS.getId().getPath(), Registration.WAYWARD_STONE_BRICK_STAIRS.getId().withPrefix("block/"));
-            itemModels().withExistingParent(Registration.WAYWARD_STONE_BRICK_SLAB.getId().getPath(), Registration.WAYWARD_STONE_BRICK_SLAB.getId().withPrefix("block/"));
-            itemModels().withExistingParent(Registration.WAYWARD_STONE_SLAB.getId().getPath(), Registration.WAYWARD_STONE_SLAB.getId().withPrefix("block/"));
+            itemModels().withExistingParent(Blocks.WAYWARD_STONE_BRICK_STAIRS.getId().getPath(), Blocks.WAYWARD_STONE_BRICK_STAIRS.getId().withPrefix("block/"));
+            itemModels().withExistingParent(Blocks.WAYWARD_STONE_BRICK_SLAB.getId().getPath(), Blocks.WAYWARD_STONE_BRICK_SLAB.getId().withPrefix("block/"));
+            itemModels().withExistingParent(Blocks.WAYWARD_STONE_SLAB.getId().getPath(), Blocks.WAYWARD_STONE_SLAB.getId().withPrefix("block/"));
 
-            itemModels().getBuilder(Registration.WAYWARD_STONE_BRICK_WALL.getId().getPath()).parent(wall);
+            itemModels().getBuilder(Blocks.WAYWARD_STONE_BRICK_WALL.getId().getPath()).parent(wall);
         }
 
         static Factory<CrossroadBlockStateProvider> providerFactory(ExistingFileHelper helper) {
@@ -158,13 +161,13 @@ public class Crossroads {
 
         @Override
         protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-            BlockFamily wayward_stone_family = new BlockFamily.Builder(Registration.WAYWARD_STONE.get()).slab(Registration.WAYWARD_STONE_SLAB.get()).getFamily();
-            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(Registration.WAYWARD_STONE_BRICKS.get()).slab(Registration.WAYWARD_STONE_BRICK_SLAB.get()).stairs(Registration.WAYWARD_STONE_BRICK_STAIRS.get()).wall(Registration.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
+            BlockFamily wayward_stone_family = new BlockFamily.Builder(Blocks.WAYWARD_STONE.get()).slab(Blocks.WAYWARD_STONE_SLAB.get()).getFamily();
+            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(Blocks.WAYWARD_STONE_BRICKS.get()).slab(Blocks.WAYWARD_STONE_BRICK_SLAB.get()).stairs(Blocks.WAYWARD_STONE_BRICK_STAIRS.get()).wall(Blocks.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
 
             generateRecipes(consumer, wayward_stone_family);
             generateRecipes(consumer, wayward_stone_bricks_family);
 
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Registration.WAYWARD_STONE_BRICKS.get()).define('#', Registration.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(Registration.WAYWARD_STONE.get())).save(consumer);
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.WAYWARD_STONE_BRICKS.get()).define('#', Blocks.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(Blocks.WAYWARD_STONE.get())).save(consumer);
 
         }
 
@@ -189,19 +192,19 @@ public class Crossroads {
                     new SubProviderEntry(() -> new BlockLootSubProvider(explosionResistant(), featureFlagSet()) {
                         @Override
                         protected void generate() {
-                            dropSelf(Registration.WAYWARD_STONE.get());
-                            dropSelf(Registration.WAYWARD_STONE_BRICKS.get());
-                            dropSelf(Registration.WAYWARD_STONE_SLAB.get());
-                            dropSelf(Registration.WAYWARD_STONE_BRICK_SLAB.get());
-                            dropSelf(Registration.WAYWARD_STONE_BRICK_STAIRS.get());
-                            dropSelf(Registration.WAYWARD_STONE_BRICK_WALL.get());
-                            add(Registration.WAYWARD_STONE_SLAB.get(), this::createSlabItemTable);
-                            add(Registration.WAYWARD_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+                            dropSelf(Blocks.WAYWARD_STONE.get());
+                            dropSelf(Blocks.WAYWARD_STONE_BRICKS.get());
+                            dropSelf(Blocks.WAYWARD_STONE_SLAB.get());
+                            dropSelf(Blocks.WAYWARD_STONE_BRICK_SLAB.get());
+                            dropSelf(Blocks.WAYWARD_STONE_BRICK_STAIRS.get());
+                            dropSelf(Blocks.WAYWARD_STONE_BRICK_WALL.get());
+                            add(Blocks.WAYWARD_STONE_SLAB.get(), this::createSlabItemTable);
+                            add(Blocks.WAYWARD_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
                         }
 
                         @Override
                         protected Iterable<Block> getKnownBlocks() {
-                            return Registration.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
+                            return CrossroadsRegistries.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
                         }
                     }, LootContextParamSets.BLOCK)
             );
