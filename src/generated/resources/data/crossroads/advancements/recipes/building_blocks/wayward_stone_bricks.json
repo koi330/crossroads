@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "crossroads:wayward_stone_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wayward_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "crossroads:wayward_stone"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wayward_stone",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "crossroads:wayward_stone_bricks"
+    ]
+  },
+  "sends_telemetry_event": false
+}

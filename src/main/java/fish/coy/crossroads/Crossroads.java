@@ -1,8 +1,13 @@
 package fish.coy.crossroads;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.*;
@@ -15,6 +20,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+
+import java.util.function.Consumer;
 
 @Mod(Crossroads.MODID)
 public class Crossroads {
@@ -45,6 +52,7 @@ public class Crossroads {
         dataGenerator.addProvider(event.includeClient(), CrossroadBlockStateProvider.providerFactory(helper));
         dataGenerator.addProvider(event.includeClient(), CrossroadBlockModelProvider.providerFactory(helper));
         dataGenerator.addProvider(event.includeClient(), CrossroadItemModelProvider.providerFactory(helper));
+        dataGenerator.addProvider(event.includeServer(), CrossroadRecipeProvider.providerFactory());
     }
 
     static class CrossroadBlockStateProvider extends BlockStateProvider {
@@ -128,5 +136,27 @@ public class Crossroads {
         }
     }
 
+    static class CrossroadRecipeProvider extends RecipeProvider {
+
+        public CrossroadRecipeProvider(PackOutput output) {
+            super(output);
+        }
+
+        @Override
+        protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+            BlockFamily wayward_stone_family = new BlockFamily.Builder(Registration.WAYWARD_STONE.get()).slab(Registration.WAYWARD_STONE_SLAB.get()).getFamily();
+            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(Registration.WAYWARD_STONE_BRICKS.get()).slab(Registration.WAYWARD_STONE_BRICK_SLAB.get()).stairs(Registration.WAYWARD_STONE_BRICK_STAIRS.get()).wall(Registration.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
+
+            generateRecipes(consumer, wayward_stone_family);
+            generateRecipes(consumer, wayward_stone_bricks_family);
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Registration.WAYWARD_STONE_BRICKS.get()).define('#', Registration.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(Registration.WAYWARD_STONE.get())).save(consumer);
+
+        }
+
+        static Factory<CrossroadRecipeProvider> providerFactory() {
+            return CrossroadRecipeProvider::new;
+        }
+    }
 
 }
