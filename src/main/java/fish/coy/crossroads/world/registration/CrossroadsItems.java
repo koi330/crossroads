@@ -7,14 +7,14 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-public class Items {
-    public static final RegistryObject<BlockItem> WAYWARD_STONE = registerBlock(Blocks.WAYWARD_STONE);
-    public static final RegistryObject<BlockItem> WAYWARD_STONE_SLAB = registerBlock(Blocks.WAYWARD_STONE_SLAB);
+public class CrossroadsItems {
+    public static final RegistryObject<BlockItem> WAYWARD_STONE = registerBlock(CrossroadsBlocks.WAYWARD_STONE);
+    public static final RegistryObject<BlockItem> WAYWARD_STONE_SLAB = registerBlock(CrossroadsBlocks.WAYWARD_STONE_SLAB);
 
-    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICKS = registerBlock(Blocks.WAYWARD_STONE_BRICKS);
-    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_SLAB = registerBlock(Blocks.WAYWARD_STONE_BRICK_SLAB);
-    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_STAIRS = registerBlock(Blocks.WAYWARD_STONE_BRICK_STAIRS);
-    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_WALL = registerBlock(Blocks.WAYWARD_STONE_BRICK_WALL);
+    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICKS = registerBlock(CrossroadsBlocks.WAYWARD_STONE_BRICKS);
+    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_SLAB = registerBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB);
+    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_STAIRS = registerBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS);
+    public static final RegistryObject<BlockItem> WAYWARD_STONE_BRICK_WALL = registerBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL);
 
     public static final RegistryObject<Item> WAYWARD_BRICK = registerItem("wayward_brick");
 

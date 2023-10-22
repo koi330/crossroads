@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-public class Blocks {
+public class CrossroadsBlocks {
 
     public static final RegistryObject<Block> WAYWARD_STONE = register("wayward_stone", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
     public static final RegistryObject<SlabBlock> WAYWARD_STONE_SLAB = register("wayward_stone_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(WAYWARD_STONE.get()).forceSolidOn()));

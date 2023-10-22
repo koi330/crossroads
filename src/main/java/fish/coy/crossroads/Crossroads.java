@@ -1,8 +1,8 @@
 package fish.coy.crossroads;
 
 import com.mojang.logging.LogUtils;
-import fish.coy.crossroads.world.registration.Blocks;
-import fish.coy.crossroads.world.registration.CreativeModeTabs;
+import fish.coy.crossroads.world.registration.CrossroadsBlocks;
+import fish.coy.crossroads.world.registration.CrossroadsCreativeModeTabs;
 import fish.coy.crossroads.world.registration.CrossroadsRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.DataGenerator;
@@ -50,7 +50,7 @@ public class Crossroads {
         CrossroadsRegistries.init(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(CreativeModeTabs::addCreative);
+        modEventBus.addListener(CrossroadsCreativeModeTabs::addCreative);
         modEventBus.addListener(Crossroads::gatherData);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
@@ -58,7 +58,7 @@ public class Crossroads {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        LOGGER.debug(CrossroadsRegistries.BLOCKS.getEntries().toString());
     }
 
     static void gatherData(GatherDataEvent event) {
@@ -85,35 +85,35 @@ public class Crossroads {
 
         @Override
         protected void registerStatesAndModels() {
-            ResourceLocation stone = Blocks.WAYWARD_STONE.getId().withPrefix("block/");
-            ResourceLocation brick = Blocks.WAYWARD_STONE_BRICKS.getId().withPrefix("block/");
+            ResourceLocation stone = CrossroadsBlocks.WAYWARD_STONE.getId().withPrefix("block/");
+            ResourceLocation brick = CrossroadsBlocks.WAYWARD_STONE_BRICKS.getId().withPrefix("block/");
 
-            simpleBlockWithItem(Blocks.WAYWARD_STONE_BRICKS.get());
+            simpleBlockWithItem(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get());
 
-            ModelFile stonemodel = cubeAll(Blocks.WAYWARD_STONE.get());
+            ModelFile stonemodel = cubeAll(CrossroadsBlocks.WAYWARD_STONE.get());
             ModelFile stonemirrormodel = models().singleTexture("wayward_stone_mirrored", mcLoc(ModelProvider.BLOCK_FOLDER + "/cube_mirrored_all"), "all", stone);
 
-            getVariantBuilder(Blocks.WAYWARD_STONE.get()).partialState().setModels(
+            getVariantBuilder(CrossroadsBlocks.WAYWARD_STONE.get()).partialState().setModels(
                     new ConfiguredModel(stonemodel),
                     new ConfiguredModel(stonemirrormodel),
                     new ConfiguredModel(stonemodel, 0, 180, false),
                     new ConfiguredModel(stonemirrormodel, 0, 180, false));
 
-            simpleBlockItem(Blocks.WAYWARD_STONE.get(), stonemodel);
+            simpleBlockItem(CrossroadsBlocks.WAYWARD_STONE.get(), stonemodel);
 
-            stairsBlock(Blocks.WAYWARD_STONE_BRICK_STAIRS.get(), brick);
-            slabBlock(Blocks.WAYWARD_STONE_BRICK_SLAB.get(), brick, brick);
-            wallBlock(Blocks.WAYWARD_STONE_BRICK_WALL.get(), brick);
+            stairsBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get(), brick);
+            slabBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get(), brick, brick);
+            wallBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get(), brick);
 
-            slabBlock(Blocks.WAYWARD_STONE_SLAB.get(), stone, stone);
+            slabBlock(CrossroadsBlocks.WAYWARD_STONE_SLAB.get(), stone, stone);
 
-            ModelFile wall = models().wallInventory(Blocks.WAYWARD_STONE_BRICK_WALL.getId().getPath() + "_inventory", brick);
+            ModelFile wall = models().wallInventory(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.getId().getPath() + "_inventory", brick);
 
-            itemModels().withExistingParent(Blocks.WAYWARD_STONE_BRICK_STAIRS.getId().getPath(), Blocks.WAYWARD_STONE_BRICK_STAIRS.getId().withPrefix("block/"));
-            itemModels().withExistingParent(Blocks.WAYWARD_STONE_BRICK_SLAB.getId().getPath(), Blocks.WAYWARD_STONE_BRICK_SLAB.getId().withPrefix("block/"));
-            itemModels().withExistingParent(Blocks.WAYWARD_STONE_SLAB.getId().getPath(), Blocks.WAYWARD_STONE_SLAB.getId().withPrefix("block/"));
+            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.getId().withPrefix("block/"));
+            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.getId().withPrefix("block/"));
+            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_SLAB.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_SLAB.getId().withPrefix("block/"));
 
-            itemModels().getBuilder(Blocks.WAYWARD_STONE_BRICK_WALL.getId().getPath()).parent(wall);
+            itemModels().getBuilder(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.getId().getPath()).parent(wall);
         }
 
         static Factory<CrossroadBlockStateProvider> providerFactory(ExistingFileHelper helper) {
@@ -161,13 +161,13 @@ public class Crossroads {
 
         @Override
         protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-            BlockFamily wayward_stone_family = new BlockFamily.Builder(Blocks.WAYWARD_STONE.get()).slab(Blocks.WAYWARD_STONE_SLAB.get()).getFamily();
-            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(Blocks.WAYWARD_STONE_BRICKS.get()).slab(Blocks.WAYWARD_STONE_BRICK_SLAB.get()).stairs(Blocks.WAYWARD_STONE_BRICK_STAIRS.get()).wall(Blocks.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
+            BlockFamily wayward_stone_family = new BlockFamily.Builder(CrossroadsBlocks.WAYWARD_STONE.get()).slab(CrossroadsBlocks.WAYWARD_STONE_SLAB.get()).getFamily();
+            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get()).slab(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get()).stairs(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get()).wall(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
 
             generateRecipes(consumer, wayward_stone_family);
             generateRecipes(consumer, wayward_stone_bricks_family);
 
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.WAYWARD_STONE_BRICKS.get()).define('#', Blocks.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(Blocks.WAYWARD_STONE.get())).save(consumer);
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, CrossroadsBlocks.WAYWARD_STONE_BRICKS.get()).define('#', CrossroadsBlocks.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(CrossroadsBlocks.WAYWARD_STONE.get())).save(consumer);
 
         }
 
@@ -192,14 +192,14 @@ public class Crossroads {
                     new SubProviderEntry(() -> new BlockLootSubProvider(explosionResistant(), featureFlagSet()) {
                         @Override
                         protected void generate() {
-                            dropSelf(Blocks.WAYWARD_STONE.get());
-                            dropSelf(Blocks.WAYWARD_STONE_BRICKS.get());
-                            dropSelf(Blocks.WAYWARD_STONE_SLAB.get());
-                            dropSelf(Blocks.WAYWARD_STONE_BRICK_SLAB.get());
-                            dropSelf(Blocks.WAYWARD_STONE_BRICK_STAIRS.get());
-                            dropSelf(Blocks.WAYWARD_STONE_BRICK_WALL.get());
-                            add(Blocks.WAYWARD_STONE_SLAB.get(), this::createSlabItemTable);
-                            add(Blocks.WAYWARD_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE.get());
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get());
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_SLAB.get());
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get());
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get());
+                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get());
+                            add(CrossroadsBlocks.WAYWARD_STONE_SLAB.get(), this::createSlabItemTable);
+                            add(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
                         }
 
                         @Override

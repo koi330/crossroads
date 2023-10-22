@@ -6,7 +6,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.registries.RegistryObject;
 
-public class StructureTypes {
+public class CrossroadsStructureTypes {
 
     public static final RegistryObject<StructureType<CrossroadStructure>> CROSSROAD_TYPE = register("crossroad", CrossroadStructure.CODEC);
 

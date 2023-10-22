@@ -1,7 +1,7 @@
 package fish.coy.crossroads.world.level.levelgen.structure.structures;
 
 import com.mojang.logging.LogUtils;
-import fish.coy.crossroads.world.registration.StructurePieceTypes;
+import fish.coy.crossroads.world.registration.CrossroadsStructurePieceTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,11 +17,11 @@ public class CrossroadPiece extends TemplateStructurePiece {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public CrossroadPiece(StructureTemplateManager manager, BlockPos blockPos, ResourceLocation location) {
-        super(StructurePieceTypes.CROSSROAD_PIECE.get(), 0, manager, location, location.toString(), new StructurePlaceSettings(), blockPos);
+        super(CrossroadsStructurePieceTypes.CROSSROAD_PIECE.get(), 0, manager, location, location.toString(), new StructurePlaceSettings(), blockPos);
     }
 
     public CrossroadPiece(StructureTemplateManager manager, CompoundTag tag) {
-        super(StructurePieceTypes.CROSSROAD_PIECE.get(), tag, manager, (location) -> new StructurePlaceSettings());
+        super(CrossroadsStructurePieceTypes.CROSSROAD_PIECE.get(), tag, manager, (location) -> new StructurePlaceSettings());
     }
 
     @Override

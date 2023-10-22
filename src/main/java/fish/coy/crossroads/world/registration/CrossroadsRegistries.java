@@ -23,13 +23,22 @@ public class CrossroadsRegistries {
 
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE = DeferredRegister.create(Registries.STRUCTURE_PIECE, Crossroads.MODID);
 
+    static {init();} // must be at the end
+
     public static void init(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
-
         STRUCTURE_TYPE.register(modEventBus);
         STRUCTURE_PIECE.register(modEventBus);
+    }
+
+    private static void init() {
+        new CrossroadsBlocks();
+        new CrossroadsItems();
+        new CrossroadsCreativeModeTabs();
+        new CrossroadsStructureTypes();
+        new CrossroadsStructurePieceTypes();
     }
 
 }

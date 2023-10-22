@@ -4,7 +4,7 @@ import fish.coy.crossroads.world.level.levelgen.structure.structures.CrossroadPi
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.registries.RegistryObject;
 
-public class StructurePieceTypes {
+public class CrossroadsStructurePieceTypes {
 
     public static final RegistryObject<StructurePieceType> CROSSROAD_PIECE = setTemplatePieceId(CrossroadPiece::new, "crossroad");
 
