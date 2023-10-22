@@ -1,27 +1,14 @@
 package fish.coy.crossroads;
 
 import com.mojang.logging.LogUtils;
-import fish.coy.crossroads.world.registration.CrossroadsBlocks;
+import fish.coy.crossroads.data.loot.CrossroadLootTableProvider;
+import fish.coy.crossroads.data.models.CrossroadBlockModelProvider;
+import fish.coy.crossroads.data.models.CrossroadBlockStateProvider;
+import fish.coy.crossroads.data.models.CrossroadItemModelProvider;
+import fish.coy.crossroads.data.recipes.packs.CrossroadRecipeProvider;
 import fish.coy.crossroads.world.registration.CrossroadsCreativeModeTabs;
 import fish.coy.crossroads.world.registration.CrossroadsRegistries;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,14 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 
 @Mod(Crossroads.MODID)
 public class Crossroads {
@@ -58,7 +38,7 @@ public class Crossroads {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.debug(CrossroadsRegistries.BLOCKS.getEntries().toString());
+
     }
 
     static void gatherData(GatherDataEvent event) {
@@ -70,161 +50,6 @@ public class Crossroads {
         dataGenerator.addProvider(event.includeClient(), CrossroadItemModelProvider.providerFactory(helper));
         dataGenerator.addProvider(event.includeServer(), CrossroadRecipeProvider.providerFactory());
         dataGenerator.addProvider(event.includeServer(), CrossroadLootTableProvider.providerFactory());
-    }
-
-    static class CrossroadBlockStateProvider extends BlockStateProvider {
-
-        public CrossroadBlockStateProvider(PackOutput output, String modid, ExistingFileHelper exFileHelper) {
-            super(output, modid, exFileHelper);
-        }
-
-        private void simpleBlockWithItem(Block block) {
-            ModelFile model = cubeAll(block);
-            simpleBlockWithItem(block, model);
-        }
-
-        @Override
-        protected void registerStatesAndModels() {
-            ResourceLocation stone = CrossroadsBlocks.WAYWARD_STONE.getId().withPrefix("block/");
-            ResourceLocation brick = CrossroadsBlocks.WAYWARD_STONE_BRICKS.getId().withPrefix("block/");
-
-            simpleBlockWithItem(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get());
-
-            ModelFile stonemodel = cubeAll(CrossroadsBlocks.WAYWARD_STONE.get());
-            ModelFile stonemirrormodel = models().singleTexture("wayward_stone_mirrored", mcLoc(ModelProvider.BLOCK_FOLDER + "/cube_mirrored_all"), "all", stone);
-
-            getVariantBuilder(CrossroadsBlocks.WAYWARD_STONE.get()).partialState().setModels(
-                    new ConfiguredModel(stonemodel),
-                    new ConfiguredModel(stonemirrormodel),
-                    new ConfiguredModel(stonemodel, 0, 180, false),
-                    new ConfiguredModel(stonemirrormodel, 0, 180, false));
-
-            simpleBlockItem(CrossroadsBlocks.WAYWARD_STONE.get(), stonemodel);
-
-            stairsBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get(), brick);
-            slabBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get(), brick, brick);
-            wallBlock(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get(), brick);
-
-            slabBlock(CrossroadsBlocks.WAYWARD_STONE_SLAB.get(), stone, stone);
-
-            ModelFile wall = models().wallInventory(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.getId().getPath() + "_inventory", brick);
-
-            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.getId().withPrefix("block/"));
-            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.getId().withPrefix("block/"));
-            itemModels().withExistingParent(CrossroadsBlocks.WAYWARD_STONE_SLAB.getId().getPath(), CrossroadsBlocks.WAYWARD_STONE_SLAB.getId().withPrefix("block/"));
-
-            itemModels().getBuilder(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.getId().getPath()).parent(wall);
-        }
-
-        static Factory<CrossroadBlockStateProvider> providerFactory(ExistingFileHelper helper) {
-            return output -> new CrossroadBlockStateProvider(output, Crossroads.MODID, helper);
-        }
-    }
-
-    static class CrossroadBlockModelProvider extends BlockModelProvider {
-
-        public CrossroadBlockModelProvider(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
-            super(output, modid, existingFileHelper);
-        }
-
-        @Override
-        protected void registerModels() {
-
-        }
-
-        static Factory<CrossroadBlockModelProvider> providerFactory(ExistingFileHelper helper) {
-            return output -> new CrossroadBlockModelProvider(output, Crossroads.MODID, helper);
-        }
-    }
-
-    static class CrossroadItemModelProvider extends ItemModelProvider {
-
-        public CrossroadItemModelProvider(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
-            super(output, modid, existingFileHelper);
-        }
-
-        @Override
-        protected void registerModels() {
-
-        }
-
-        static Factory<CrossroadItemModelProvider> providerFactory(ExistingFileHelper helper) {
-            return output -> new CrossroadItemModelProvider(output, Crossroads.MODID, helper);
-        }
-    }
-
-    static class CrossroadRecipeProvider extends RecipeProvider {
-
-        public CrossroadRecipeProvider(PackOutput output) {
-            super(output);
-        }
-
-        @Override
-        protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-            BlockFamily wayward_stone_family = new BlockFamily.Builder(CrossroadsBlocks.WAYWARD_STONE.get()).slab(CrossroadsBlocks.WAYWARD_STONE_SLAB.get()).getFamily();
-            BlockFamily wayward_stone_bricks_family = new BlockFamily.Builder(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get()).slab(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get()).stairs(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get()).wall(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get()).getFamily();
-
-            generateRecipes(consumer, wayward_stone_family);
-            generateRecipes(consumer, wayward_stone_bricks_family);
-
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, CrossroadsBlocks.WAYWARD_STONE_BRICKS.get()).define('#', CrossroadsBlocks.WAYWARD_STONE.get()).pattern("##").pattern("##").unlockedBy("has_wayward_stone", has(CrossroadsBlocks.WAYWARD_STONE.get())).save(consumer);
-
-        }
-
-        static Factory<CrossroadRecipeProvider> providerFactory() {
-            return CrossroadRecipeProvider::new;
-        }
-    }
-
-    static class CrossroadLootTableProvider extends LootTableProvider {
-
-        public CrossroadLootTableProvider(PackOutput output, Set<ResourceLocation> locationSet, List<SubProviderEntry> entryList) {
-            super(output, locationSet, entryList);
-        }
-
-        @Override
-        protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationcontext) {
-
-        }
-
-        static List<SubProviderEntry> subProviders() {
-            return List.of(
-                    new SubProviderEntry(() -> new BlockLootSubProvider(explosionResistant(), featureFlagSet()) {
-                        @Override
-                        protected void generate() {
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE.get());
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICKS.get());
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_SLAB.get());
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get());
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_STAIRS.get());
-                            dropSelf(CrossroadsBlocks.WAYWARD_STONE_BRICK_WALL.get());
-                            add(CrossroadsBlocks.WAYWARD_STONE_SLAB.get(), this::createSlabItemTable);
-                            add(CrossroadsBlocks.WAYWARD_STONE_BRICK_SLAB.get(), this::createSlabItemTable);
-                        }
-
-                        @Override
-                        protected Iterable<Block> getKnownBlocks() {
-                            return CrossroadsRegistries.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
-                        }
-                    }, LootContextParamSets.BLOCK)
-            );
-        }
-
-        static Set<ResourceLocation> specialTables() {
-            return Collections.emptySet();
-        }
-
-        static Set<Item> explosionResistant() {
-            return Collections.emptySet();
-        }
-
-        static FeatureFlagSet featureFlagSet() {
-            return FeatureFlags.REGISTRY.allFlags();
-        }
-
-        static Factory<CrossroadLootTableProvider> providerFactory() {
-            return output -> new CrossroadLootTableProvider(output, specialTables(), subProviders());
-        }
     }
 
 }
