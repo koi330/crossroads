@@ -2,5 +2,6 @@
   "type": "crossroads:crossroad",
   "biomes": "#minecraft:has_structure/ruined_portal_standard",
   "spawn_overrides": {},
-  "step": "surface_structures"
+  "step": "surface_structures",
+  "gate": false
 }

@@ -29,6 +29,8 @@ public class Crossroads {
     public static final String MODID = "crossroads";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    //TODO: get gates to spawn and make them do some gate stuff
+
     public Crossroads() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         CrossroadsRegistries.init(modEventBus);

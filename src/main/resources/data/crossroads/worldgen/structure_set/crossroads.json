@@ -9,6 +9,10 @@
     {
       "structure": "crossroads:crossroad",
       "weight": 1
+    },
+    {
+      "structure": "crossroads:gate",
+      "weight": 1
     }
   ]
 }

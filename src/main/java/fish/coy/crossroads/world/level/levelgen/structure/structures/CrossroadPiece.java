@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -16,8 +17,8 @@ import org.slf4j.Logger;
 public class CrossroadPiece extends TemplateStructurePiece {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public CrossroadPiece(StructureTemplateManager manager, BlockPos blockPos, ResourceLocation location) {
-        super(CrossroadsStructurePieceTypes.CROSSROAD_PIECE.get(), 0, manager, location, location.toString(), new StructurePlaceSettings(), blockPos);
+    public CrossroadPiece(StructureTemplateManager manager, BlockPos blockPos, Rotation rotation, ResourceLocation location) {
+        super(CrossroadsStructurePieceTypes.CROSSROAD_PIECE.get(), 0, manager, location, location.toString(), new StructurePlaceSettings().setRotation(rotation), blockPos);
     }
 
     public CrossroadPiece(StructureTemplateManager manager, CompoundTag tag) {
